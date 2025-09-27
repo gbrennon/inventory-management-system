@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # MongoDB Database
   mongodb:
-    image: mongo:7.0
+    image: prismagraphql/mongo-single-replica:5.0.3
     container_name: inventory-mongodb-prod
     restart: unless-stopped
     environment:
@@ -26,7 +26,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8000
-      DATABASE_URL: mongodb://admin:${MONGO_PASSWORD:-securepassword123}@mongodb:27017/inventory_db?authSource=admin
+      DATABASE_URL: mongodb://admin:${MONGO_PASSWORD:-securepassword123}@mongodb:27017/inventory_db?authSource=admin&directConnection=true
       JWT_SECRET: ${JWT_SECRET:-your_super_secret_jwt_key_change_this_in_production}
     ports:
       - "8000:8000"
