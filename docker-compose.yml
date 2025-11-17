@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   # MongoDB Database
   mongodb:
-    image: prismagraphql/mongo-single-replica:5.0.3
+    # Change the image here:
+    image: mongo:5.0
     container_name: inventory-mongodb
     restart: unless-stopped
     environment:
@@ -14,6 +13,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+      # The initialization script mount is correct for the official image
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - inventory-network
@@ -61,6 +61,7 @@ services:
 
 volumes:
   mongodb_data:
+
 
 networks:
   inventory-network:
