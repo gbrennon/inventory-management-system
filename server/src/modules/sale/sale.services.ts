@@ -6,6 +6,7 @@ import BaseServices from '../baseServices';
 import Sale from './sale.model';
 import Product from '../product/product.model';
 import CustomError from '../../errors/customError';
+import eventPublisher from '../event-bus/eventPublisher';
 
 class SaleServices extends BaseServices<any> {
   constructor(model: any, modelName: string) {
@@ -33,6 +34,12 @@ class SaleServices extends BaseServices<any> {
       await Product.findByIdAndUpdate(product?._id, { $inc: { stock: -quantity } }, { session });
       result = await this.model.create([payload], { session });
       await session.commitTransaction();
+
+      await eventPublisher.createSale({
+        productId: payload.product,
+        quantity: payload.quantity,
+        totalPrice: payload.totalPrice
+      });
 
       return result;
     } catch (error) {
